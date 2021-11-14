@@ -45,7 +45,7 @@ typedef struct MyParam{
 	double sigma = 0.1;
 	uint patchSize = 5;
     uint filterWidth = 2;
-	bool parallel = false;
+	bool parallel = true;
 	uint parallelJump = 1;
 	bool noisyImage = true; // false = lowerThreshold
 	uint minLevelOfStitching = 0; // 0 = stichAll
@@ -99,7 +99,7 @@ class Detector {
 		Mat* _pixelScores;
 		unordered_map<uint, Mat> _pixels;
 		bool _debug = false;
-		//std::mutex _mtx;
+		std::mutex _mtx;
 		uint _maxLevel;
 
 		/* Bottom Level Processing */
@@ -117,9 +117,9 @@ class Detector {
 		/* Sub Functions */
 		void subIm(const Mat& Ssrc, uint x0, uint y0, uint x1, uint y1, Mat& Sdst);
 		void getEdgeIndices(const Mat& S, vector<Mat>& v);
-		//void addIndices(Mat& table, Mat& ind0, Mat& s0, Mat& ind1);
-		//bool angleInRange(uint ind0, uint s0, uint ind1, uint level);
-		//bool angleInRange(double ang0, double ang1, uint level);
+		void addIndices(Mat& table, Mat& ind0, Mat& s0, Mat& ind1);
+		bool angleInRange(uint ind0, uint s0, uint ind1, uint level);
+		bool angleInRange(double ang0, double ang1, uint level);
 		double getThreshold(double len){
 			double fact = _prm.noisyImage ? 1 : 0.0;
 			return _prm.sigma*(fact*0.14+sqrt(2 * log(6 * _handle.N) / _w / len / 2));
@@ -127,8 +127,8 @@ class Detector {
 		uint getSideLength(uint m, uint n, uint e);
 		bool insertValueToMap(uint index, const double& key, const Mat& value);
 		int getAngle(double dx, double dy);
-		//void lock();
-		//void unlock();
+		void lock();
+		void unlock();
 
 		/* Post Processing */
 		void getScores();

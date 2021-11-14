@@ -5,6 +5,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include "tools.h"
 #include "Detector.h"
+#include "mex.h"
 
 
 using namespace std;
@@ -54,23 +55,22 @@ int main( int argc, char** argv )
 }
 
 */
-/*
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
 	mexPrintf("Run Edge Detection\n");
 	if (nrhs != 7) {
 		mexErrMsgIdAndTxt("MATLAB:mexcpp:nargin", "MEXCPP requires seven input arguments.");
 	}
-    
+    /*
 	else if (nlhs != 1) {
 		mexErrMsgIdAndTxt("MATLAB:mexcpp:nargout", "MEXCPP requires one output argument.");
 	}
 
-    
+    /*
 	if (!mxIsDouble(prhs[0])) {
 		mexErrMsgIdAndTxt("MyToolbox:arrayProduct:notDouble", "Input Matrix must be a double.");
 	}
-    
+    */
     
 	for (int i = 1; i < 7; ++i){
 		if (!mxIsDouble(prhs[i]) || mxGetNumberOfElements(prhs[i]) != 1) {
@@ -116,4 +116,3 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	//plhs[0] = mxCreateDoubleMatrix(E.rows, E.cols, mxREAL);
 	//memcpy(mxGetPr(plhs[0]), E.data, E.rows * E.cols * sizeof(double));
 }
-*/

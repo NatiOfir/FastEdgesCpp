@@ -6,7 +6,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <math.h>
-//#include <thread>
+#include <thread>
 #include "Detector.h"
 #include "tools.h"
 
@@ -174,7 +174,7 @@ void Detector::beamCurves(uint index, uint level, Mat* S){
 		Mat* SArr1[] = { &S0, &S1 };
 		Mat* SArr2[] = { &S2, &S3 };
 
-	/*if (_prm.parallel && level%_prm.parallelJump == 0){
+		if (_prm.parallel && level%_prm.parallelJump == 0){
 			vector<std::thread> tasks;
 			for (uint i = 0; i < s1len; ++i)
 				tasks.push_back(std::thread(std::bind(&Detector::beamCurves, this, t[i], level + 1, SArr1[i])));
@@ -183,10 +183,9 @@ void Detector::beamCurves(uint index, uint level, Mat* S){
 				tasks[i].join();
 		}
 		else{
-		*/
 			for (uint i = 0; i < s1len; ++i)
 				beamCurves(t[i], level + 1, SArr1[i]);
-		//}
+		}
 		_prm.matrixMaximum(_pixelScores[t[0]], _pixelScores[t[1]], _pixelScores[index]);
 		for (uint i = 0; i < s1len; ++i){
 			_pixelScores[t[i]].release();
@@ -237,7 +236,7 @@ void Detector::mergeTilesSimple(const Mat& S1, const Mat& S2, uint index, uint l
 	vector<Mat> edgeS2; getEdgeIndices(S2, edgeS2);
 	Mat split;
 
-	//vector<std::thread> tasks;
+	vector<std::thread> tasks;
 
 	if (verticalSplit){
 		getBestSplittingPoints(edgeS1[2], split, index);
@@ -604,20 +603,19 @@ void Detector::getBottomLevelSimple(Mat& S, uint index){
 					}
 
 					
-					//lock();
+					lock();
 					_pixels[(uint)ind01] = curPixels.clone();
 					_pixels[(uint)ind10] = curPixels.clone();
 
 					//_pixels[(uint)ind01] = curPixels.clone();
 					//_pixels[(uint)ind10] = curPixels.clone();
-					//unlock();
+					unlock();
 				}
 			}
 		}
 	}
 }
 
-/*
 void Detector::lock(){
 	std::chrono::milliseconds interval(0);
 	while (true){
@@ -629,12 +627,10 @@ void Detector::lock(){
 		}
 	}
 }
-*/
-/*
+
 void Detector::unlock(){
 	_mtx.unlock();
 }
-*/
 
 /*
 Return 0-359 angle from the bottom level edge with directions.
